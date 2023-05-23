@@ -1,29 +1,21 @@
 // Import express module 
 const express = require('express');
 
-const mysql = require('mysql');
+// Import the player.js module
+const playersRouter = require('./players.js');
 
-//Create an express.js app instance
+// Create an express.js app instance
 const app = express();
-
-// Database connection configuration 
-const dbconfig = {
-    host     :    'localhost',
-    user     :    'root',
-    password :    ' ',
-    database :    'dartgamedb',
-};
-
-// Create a database connection pool
-const pool = mysql.createPool(dbconfig);
-
-// Set the connection pool as a property in the app object
-app.locals.pool = pool;
 
 // Set the port
 const port = process.env.PORT || 3000;
 
 // Configure middleware 
+// Enable json parsing allowing us to parse JSON data in the request bodies
+app.use (express.json());
+
+// Mount the 'players.js' to the './players' path
+app.use ('/players', playersRouter);
 
 // Define routes
 
