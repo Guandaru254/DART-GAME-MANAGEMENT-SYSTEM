@@ -1,28 +1,53 @@
-// Import express module 
-const express = require('express');
+// Import dependencies 
+const express = require ( 'express' );
 
-// Import the player.js module
-const playersRouter = require('./players.js');
+const players =   require( './players' );
 
-// Create an express.js app instance
+const payments = require('./payments');
+
+const scores = require('./scores');
+
+const games = require('./games');
+
+const board = require('./board');
+
+const darts = require('./darts');
+
+const staff = require('./staff');
+
+const designations = require('./designations');
+
+//const bodyParser = require ( 'body-parser' );
+
+//const playersRouter = require( './players');
+
 const app = express();
 
-// Set the port
-const port = process.env.PORT || 3000;
+const port = 3000;
 
-// Configure middleware 
-// Enable json parsing allowing us to parse JSON data in the request bodies
-app.use (express.json());
+// Middleware Setup
+ //app.use (bodyParser.json());
 
-// Mount the 'players.js' to the './players' path
-app.use ('/players', playersRouter);
+// Mount the Router
+app.use ('/players', players);
 
-// Define routes
+app.use ('/payments', payments);
+
+app.use ('/scores' , scores);
+
+app.use ('/games', games);
+
+app.use ('/board', board);
+
+app.use ('/darts', darts);
+
+app.use ('/staff', staff);
+
+app.use ('/designations', designations);
+
+//app.use ('./players', playersRouter);
 
 // Start the server
 app.listen (port, () => {
-    console.log (`Server is running on port ${port}`);
+    console.log ('Server listening on port 3000');
 });
-
-
-

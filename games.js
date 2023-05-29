@@ -1,37 +1,73 @@
-// Import express.js module 
+// Import dependencies
+
 const express = require('express');
 
+const mysql = require('mysql');
+
+
+const dbConfig = {
+    host : 'localhost',
+    user : 'root',
+    password : 'guandaru',
+    database : 'dartgame_db',
+};
+
+/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
+    if (err) {
+        return console.log (err);
+    }
+    return console.log (result);
+})*/
+
 // Create a router instance
-const router = express.Router();
+const app = express();
 
-const {pool} = require('./dartdbconnect')
+app.use (express.json());
 
-const { getConnection , db } = require('./dartdbconnect')
+const connection = mysql.createConnection(dbConfig);
 
-
-
-// Define endpoints
-// Create Route : GET ./games
-router.get ('/', async (req,res) => {
-    try {
-        const pool = db;
-          //Acquire a connection from the pool
-          const connection = await getConnection();
-          // Execute the SQL query to retrieve all the games
-          const games = await connection.query ('SELECT * FROM dartgame_db.games');
-          // Release the connection back to the pool
-          connection.release ();
-          // Check if any games were found
-            if (games.length === 0) {
-              return res.status(404).json({error : 'No games found'});
-            }
-          // Send the retrieved games as the response
-          res.json (games);
+connection.connect((err) => {
+    if (err) {
+        console.error ('Error creating connection to the database', err);
+        return; 
     }
-    catch (error) {
-        console.error ('Error fetching games :', error);
-        res.status (500).json({error : 'Error fetching games'});
-    }
+    console.log('Connected to database');
 });
 
-module.exports = router;
+
+
+app.get ('/',  (req, res) => {
+        connection.query('SELECT * FROM games',(err,result) => {
+            if (err) {
+                console.error('Error retrieving games');
+                return res.status(500).json({error : 'Error retrieving games'});
+            }
+            if (result.length === 0) {
+                return res.status(404).json({error : 'No games found'});
+            }
+            
+            res.json(result);
+        });
+    });
+
+
+app.post ('/', (req,res) => {
+    const {Player_ID, Player_Name, Phone_Number, Age} = req.body;
+    const query = 'INSERT INTO players (Player_ID, Player_Name, Phone_Number, Age) VALUES (?,?,?,?) ';
+    connection.query(query, [Player_ID, Player_Name, Phone_Number, Age], (err,result) => {
+        if (err) {
+      console.error ('Error inserting player data into database');
+      return res.status (500).json({error : 'Error inserting player data into database'});
+        }
+      res.json({success : true, message : 'Player data successfully inserted'});
+    });
+});
+
+
+process.on('SIGINT', () => {
+    connection.end();
+    process.exit();
+});
+
+
+module.exports =  app;

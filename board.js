@@ -37,13 +37,13 @@ connection.connect((err) => {
 
 
 app.get ('/',  (req, res) => {
-        connection.query('SELECT * FROM players',(err,result) => {
+        connection.query('SELECT * FROM board',(err,result) => {
             if (err) {
-                console.error('Error retrieving players');
-                return res.status(500).json({error : 'Error retrieving players'});
+                console.error('Error retrieving board');
+                return res.status(500).json({error : 'Error retrieving board'});
             }
             if (result.length === 0) {
-                return res.status(404).json({error : 'No players found'});
+                return res.status(404).json({error : 'No board found'});
             }
             
             res.json(result);
