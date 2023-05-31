@@ -4,8 +4,6 @@ const express = require('express');
 
 const mysql = require('mysql');
 
-const app = express();
-
 const dbConfig = {
     host : 'localhost',
     user : 'root',
@@ -13,14 +11,11 @@ const dbConfig = {
     database : 'dartgame_db',
 };
 
-/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
-    if (err) {
-        return console.log (err);
-    }
-    return console.log (result);
-})*/
-
 // Create a router instance
+
+const app = express();
+
+app.use (express.json());
 
 const connection = mysql.createConnection(dbConfig);
 
@@ -64,7 +59,18 @@ app.get ('/:id',  (req, res) => {
     });
 });
 
-app.post ('')
+app.post ('/', (req,res) => {
+   // const { Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age  } = req.body;
+    const query = 'INSERT INTO staff (Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age) VALUES (?,?,?,?,?,?,?) ';
+    connection.query(query, [Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age], (err,result) => {
+        if (err) {
+      console.error ('Error inserting staff data into database');
+      return res.status (500).json({error : 'Error inserting staff data into database'});
+        }
+      res.json({success : true, message : 'Staff data successfully inserted'});
+    });
+});
+
 
 process.on('SIGINT', () => {
     connection.end();

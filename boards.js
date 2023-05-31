@@ -12,13 +12,6 @@ const dbConfig = {
     database : 'dartgame_db',
 };
 
-/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
-    if (err) {
-        return console.log (err);
-    }
-    return console.log (result);
-})*/
-
 // Create a router instance
 const app = express();
 
@@ -37,13 +30,13 @@ connection.connect((err) => {
 
 
 app.get ('/',  (req, res) => {
-        connection.query('SELECT * FROM board',(err,result) => {
+        connection.query('SELECT * FROM boards',(err,result) => {
             if (err) {
-                console.error('Error retrieving board');
-                return res.status(500).json({error : 'Error retrieving board'});
+                console.error('Error retrieving boards');
+                return res.status(500).json({error : 'Error retrieving boards'});
             }
             if (result.length === 0) {
-                return res.status(404).json({error : 'No board found'});
+                return res.status(404).json({error : 'No boards found'});
             }
             
             res.json(result);
@@ -53,9 +46,9 @@ app.get ('/',  (req, res) => {
 
 
     app.post ('/', (req,res) => {
-        const {Player_ID, Player_Name, Phone_Number, Age} = req.body;
-        const query = 'INSERT INTO boards (Player_ID, Player_Name, Phone_Number, Age) VALUES (?,?,?,?) ';
-        connection.query(query, [Player_ID, Player_Name, Phone_Number, Age], (err,result) => {
+        const {Board_ID, Player_ID, Game_ID , Board_Name, Board_Model, IsAvailable , Board_Location } = req.body;
+        const query = 'INSERT INTO boards (Board_ID, Player_ID, Game_ID , Board_Name, Board_Model ,IsAvailable , Board_Location ) VALUES (?,?,?,?,?,?,?) ';
+        connection.query(query, [Board_ID, Player_ID, Game_ID , Board_Name, Board_Model ,IsAvailable , Board_Location ], (err,result) => {
             if (err) {
           console.error ('Error inserting boards data into database');
           return res.status (500).json({error : 'Error inserting boards data into database'});

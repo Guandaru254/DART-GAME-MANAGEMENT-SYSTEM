@@ -4,8 +4,6 @@ const express = require('express');
 
 const mysql = require('mysql');
 
-const app = express();
-
 const dbConfig = {
     host : 'localhost',
     user : 'root',
@@ -13,14 +11,11 @@ const dbConfig = {
     database : 'dartgame_db',
 };
 
-/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
-    if (err) {
-        return console.log (err);
-    }
-    return console.log (result);
-})*/
-
 // Create a router instance
+
+const app = express();
+
+app.use (express.json());
 
 const connection = mysql.createConnection(dbConfig);
 
@@ -31,7 +26,6 @@ connection.connect((err) => {
     }
     console.log('Connected to database');
 });
-
 
 
 app.get ('/',  (req, res) => {
@@ -63,6 +57,21 @@ app.get ('/:id',  (req, res) => {
         res.json(result[0]);
     });
 });
+
+
+app.post ('/', (req,res) => {
+    const {Score_ID, Player_ID , Game_ID , Score_Value , Time_Recorded} = req.body;
+    const query = 'INSERT INTO scores ( Score_ID , Player_ID , Game_ID , Score_Value , Time_Recorded ) VALUES (?,?,?,?,?) ';
+    connection.query(query, [Score_ID, Player_ID , Game_ID , Score_Value , Time_Recorded], (err,result) => {
+        if (err) {
+      console.error ('Error inserting score data into database');
+      return res.status (500).json({error : 'Error inserting score data into database'});
+        }
+      res.json({success : true, message : 'Score data successfully inserted'});
+    });
+});
+
+// Invoke-RestMethod -Uri "http://localhost:3000/scores" -Method POST -ContentType "application/json" -Body '{"Score_ID":"SCR05"}'
 
 process.on('SIGINT', () => {
     connection.end();

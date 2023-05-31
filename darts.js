@@ -4,8 +4,6 @@ const express = require('express');
 
 const mysql = require('mysql');
 
-const app = express();
-
 const dbConfig = {
     host : 'localhost',
     user : 'root',
@@ -13,14 +11,12 @@ const dbConfig = {
     database : 'dartgame_db',
 };
 
-/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
-    if (err) {
-        return console.log (err);
-    }
-    return console.log (result);
-})*/
 
 // Create a router instance
+
+const app = express();
+
+app.use (express.json());
 
 const connection = mysql.createConnection(dbConfig);
 
@@ -64,7 +60,17 @@ app.get ('/:id',  (req, res) => {
     });
 });
 
-app.post ('')
+app.post ('/', (req,res) => {
+    const { Dart_ID, Player_ID, Dart_Material, Dart_Length, Dart_Weight, Dart_Level } = req.body;
+    const query = 'INSERT INTO darts (Dart_ID, Player_ID, Dart_Material, Dart_Length, Dart_Weight, Dart_Level ) VALUES (?,?,?,?,?,?) ';
+    connection.query(query, [Dart_ID, Player_ID, Dart_Material, Dart_Length, Dart_Weight, Dart_Level ], (err,result) => {
+        if (err) {
+      console.error ('Error inserting dart data into database');
+      return res.status (500).json({error : 'Error inserting dart data into database'});
+        }
+      res.json({success : true, message : 'dart data successfully inserted'});
+    });
+});
 
 process.on('SIGINT', () => {
     connection.end();

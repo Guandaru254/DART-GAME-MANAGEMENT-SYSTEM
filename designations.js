@@ -64,8 +64,17 @@ app.get ('/:id',  (req, res) => {
     });
 });
 
-app.post ('')
-
+app.post ('/', (req,res) => {
+    const { Designation_ID , Designation_Role , Hire_Date } = req.body;
+    const query = 'INSERT INTO designations ( Designation_ID , Designation_Role , Hire_Date ) VALUES (?,?,?,?) ';
+    connection.query(query, [ Designation_ID , Designation_Role , Hire_Date ], (err,result) => {
+        if (err) {
+      console.error ('Error inserting designations data into database');
+      return res.status (500).json({error : 'Error inserting designations data into database'});
+        }
+      res.json({success : true, message : 'Designations data successfully inserted'});
+    });
+});
 process.on('SIGINT', () => {
     connection.end();
     process.exit();

@@ -1,7 +1,7 @@
 // Import dependencies 
 const express = require ( 'express' );
 
-const players =   require( './players' );
+const players = require( './players' );
 
 const payments = require('./payments');
 
@@ -9,7 +9,7 @@ const scores = require('./scores');
 
 const games = require('./games');
 
-const board = require('./board');
+const boards = require('./boards');
 
 const darts = require('./darts');
 
@@ -37,7 +37,7 @@ app.use ('/scores' , scores);
 
 app.use ('/games', games);
 
-app.use ('/board', board);
+app.use ('/boards', boards);
 
 app.use ('/darts', darts);
 

@@ -4,8 +4,6 @@ const express = require('express');
 
 const mysql = require('mysql');
 
-const app = express();
-
 const dbConfig = {
     host : 'localhost',
     user : 'root',
@@ -13,14 +11,11 @@ const dbConfig = {
     database : 'dartgame_db',
 };
 
-/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
-    if (err) {
-        return console.log (err);
-    }
-    return console.log (result);
-})*/
-
 // Create a router instance
+
+const app = express();
+
+app.use (express.json());
 
 const connection = mysql.createConnection(dbConfig);
 
@@ -64,7 +59,19 @@ app.get ('/:id',  (req, res) => {
     });
 });
 
-app.post ('')
+app.post ('/', (req,res) => {
+    const {Payment_ID, Player_ID, Game_ID, Payment_Method, Amount } = req.body;
+    const query = 'INSERT INTO payments (Payment_ID, Player_ID, Game_ID, Payment_Method, Amount ) VALUES (?,?,?,?,?) ';
+    connection.query(query, [Payment_ID, Player_ID, Game_ID, Payment_Method, Amount ], (err,result) => {
+        if (err) {
+      console.error ('Error inserting payment data into database');
+      return res.status (500).json({error : 'Error inserting payment data into database'});
+        }
+      res.json({success : true, message : 'Payment data successfully inserted'});
+    });
+});
+
+// Invoke-RestMethod -Uri "http://localhost:3000/payments" -Method POST -ContentType "application/json" -Body '{"Payment_ID":"PAY005","Game_ID":"GM04", "Payment_Method":"STRIPE", "Amount":"1000"}'
 
 process.on('SIGINT', () => {
     connection.end();

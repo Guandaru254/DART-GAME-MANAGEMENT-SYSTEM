@@ -12,13 +12,6 @@ const dbConfig = {
     database : 'dartgame_db',
 };
 
-/*pool.query ('SELECT * FROM players', (err, result, fields)  => {
-    if (err) {
-        return console.log (err);
-    }
-    return console.log (result);
-})*/
-
 // Create a router instance
 const app = express();
 
@@ -52,14 +45,14 @@ app.get ('/',  (req, res) => {
 
 
 app.post ('/', (req,res) => {
-    const {Player_ID, Player_Name, Phone_Number, Age} = req.body;
-    const query = 'INSERT INTO players (Player_ID, Player_Name, Phone_Number, Age) VALUES (?,?,?,?) ';
-    connection.query(query, [Player_ID, Player_Name, Phone_Number, Age], (err,result) => {
+    const { Game_ID , Player_ID , Game_Type , Game_Status } = req.body;
+    const query = 'INSERT INTO games (Game_ID , Player_ID , Game_Type , Game_Status) VALUES (?,?,?,?) ';
+    connection.query(query, [Game_ID , Player_ID , Game_Type , Game_Status], (err,result) => {
         if (err) {
-      console.error ('Error inserting player data into database');
-      return res.status (500).json({error : 'Error inserting player data into database'});
+      console.error ('Error inserting game data into database');
+      return res.status (500).json({error : 'Error inserting game data into database'});
         }
-      res.json({success : true, message : 'Player data successfully inserted'});
+      res.json({success : true, message : 'Game data successfully inserted'});
     });
 });
 
