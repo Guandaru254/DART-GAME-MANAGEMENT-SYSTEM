@@ -60,6 +60,21 @@ app.get ('/:id',  (req, res) => {
     });
 });
 
+app.get ('/:id',  (req, res) => {
+    const Darts_ID = req.params.id;
+    connection.query('SELECT * FROM darts WHERE Dart_ID = ?',[Dart_ID],(err,result) => {
+        if (err) {
+            console.error('Error retrieving dart');
+            return res.status(500).json({error : 'Error retrieving dart'});
+        }
+        if (result.length === 0) {
+            return res.status(404).json({error : 'No dart found'});
+        }
+        
+        res.json(result[0]);
+    });
+});
+
 app.post ('/', (req,res) => {
     const { Dart_ID, Player_ID, Dart_Material, Dart_Length, Dart_Weight, Dart_Level } = req.body;
     const query = 'INSERT INTO darts (Dart_ID, Player_ID, Dart_Material, Dart_Length, Dart_Weight, Dart_Level ) VALUES (?,?,?,?,?,?) ';
@@ -69,6 +84,38 @@ app.post ('/', (req,res) => {
       return res.status (500).json({error : 'Error inserting dart data into database'});
         }
       res.json({success : true, message : 'dart data successfully inserted'});
+    });
+});
+
+
+app.put('/', (req,res) => {
+    const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
+    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
+    connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
+        if (err) {
+            console.error ('Error updating player');
+            return res.status (500).json({error : 'Error updating player'});
+        }
+        if (result.affectedRows === 0) {
+            return res.status (404).json({error : 'Player not found'});
+        }
+        res.json ({message : 'Player updated successfully'});
+    });
+});
+
+
+app.delete ('/:id', (req,res) => {
+    const Player_ID = req.params.id;
+    const query = 'DELETE FROM players WHERE Player_ID = ?';
+    connection.query (query, [Player_ID], (err,result) => {
+        if (err) {
+            console.log ('Error deleting player');
+            return res.status(500).json({error : 'Error deleting player'});
+        }
+        if (result.affectedRows === 0) {
+            return res.status (404).json({error : 'Player not found'});
+        }
+        res.json({message : 'Player deleted successfully'});
     });
 });
 
