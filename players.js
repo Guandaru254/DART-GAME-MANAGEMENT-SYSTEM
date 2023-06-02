@@ -27,9 +27,7 @@ connection.connect((err) => {
     console.log('Connected to database');
 });
 
-
-
-app.get ('/',  (req, res) => {
+ app.get ('/',  (req, res) => {
         connection.query('SELECT * FROM players',(err,result) => {
             if (err) {
                 console.error('Error retrieving players');
@@ -40,7 +38,25 @@ app.get ('/',  (req, res) => {
             }
             res.json(result);
         });
-    });
+    });  
+
+
+
+
+   app.get ('/players/:id',  (req, res) => {
+        const Player_ID = req.params.id;
+        connection.query('SELECT * FROM players WHERE Player_ID = PLY005 ',[Player_ID],(err,result) => {
+            if (err) {
+                console.error('Error retrieving player', err);
+                return res.status(500).json({error : 'Error retrieving player'});
+            }
+            if (result.length === 0) {
+                return res.status(404).json({error : 'No player found'});
+            }
+            
+            res.json(result[0]);
+        });
+    }); 
 
 
 app.post ('/', (req,res) => {
@@ -58,7 +74,7 @@ app.post ('/', (req,res) => {
 
 app.put('/', (req,res) => {
     const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
-    const updatedPlayerData = { PLayer_ID : 'PLY008', Player_Name : 'KENTRELL GAULDEN', Phone_Number : '+254722222223', Age : '24', };
+    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
     connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
         if (err) {
             console.error ('Error updating player');
@@ -72,8 +88,9 @@ app.put('/', (req,res) => {
 });
 
 app.delete ('/:id', (req,res) => {
-    const Player_ID = DT002;
-    connection.query ('DELETE FROM players WHERE id =?', DT002, (err,result) => {
+    const Player_ID = req.params.id;
+    const query = 'DELETE FROM players WHERE Player_ID = ?';
+    connection.query (query, [Player_ID], (err,result) => {
         if (err) {
             console.log ('Error deleting player');
             return res.status(500).json({error : 'Error deleting player'});
