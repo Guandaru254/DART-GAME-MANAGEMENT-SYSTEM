@@ -4,8 +4,6 @@ const express = require('express');
 
 const mysql = require('mysql');
 
-const app = express();
-
 const dbConfig = {
     host : 'localhost',
     user : 'root',
@@ -14,6 +12,8 @@ const dbConfig = {
 };
 
 // Create a router instance
+
+const app = express();
 
 app.use(express.json());
 
@@ -59,21 +59,6 @@ app.get ('/:id',  (req, res) => {
     });
 });
 
-app.get ('/:id',  (req, res) => {
-    const Payment_ID = req.params.id;
-    connection.query('SELECT * FROM payments WHERE Payment_ID = ?',[Payment_ID],(err,result) => {
-        if (err) {
-            console.error('Error retrieving payment');
-            return res.status(500).json({error : 'Error retrieving payment'});
-        }
-        if (result.length === 0) {
-            return res.status(404).json({error : 'No payment found'});
-        }
-        
-        res.json(result[0]);
-    });
-});
-
 app.post ('/', (req,res) => {
     const { Designation_ID , Designation_Role , Hire_Date } = req.body;
     const query = 'INSERT INTO designations ( Designation_ID , Designation_Role , Hire_Date ) VALUES (?,?,?) ';
@@ -87,34 +72,34 @@ app.post ('/', (req,res) => {
 });
 
 
-app.put('/', (req,res) => {
-    const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
-    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
-    connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
+app.put('/:id', (req,res) => {
+    const { Designation_ID , Designation_Role } = req.body;
+    const updatedDesignationData = {  Designation_ID , Designation_Role };
+    connection.query ('UPDATE designations SET ? WHERE Designation_ID = ?', [updatedDesignationData, Designation_ID], (err,result) => {
         if (err) {
-            console.error ('Error updating player');
-            return res.status (500).json({error : 'Error updating player'});
+            console.error ('Error updating designation');
+            return res.status (500).json({error : 'Error updating designation'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Designation not found'});
         }
-        res.json ({message : 'Player updated successfully'});
+        res.json ({message : 'Designation updated successfully'});
     });
 });
 
 
 app.delete ('/:id', (req,res) => {
-    const Player_ID = req.params.id;
-    const query = 'DELETE FROM players WHERE Player_ID = ?';
-    connection.query (query, [Player_ID], (err,result) => {
+    const Designation_ID = req.params.id;
+    const query = 'DELETE FROM designations WHERE Designation_ID = ?';
+    connection.query (query, [Designation_ID], (err,result) => {
         if (err) {
-            console.log ('Error deleting player');
-            return res.status(500).json({error : 'Error deleting player'});
+            console.log ('Error deleting designation');
+            return res.status(500).json({error : 'Error deleting designation'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Designatiom not found'});
         }
-        res.json({message : 'Player deleted successfully'});
+        res.json({message : 'Designation deleted successfully'});
     });
 });
 
