@@ -43,9 +43,9 @@ connection.connect((err) => {
 
 
 
-   app.get ('/players/:id',  (req, res) => {
+   app.get ('/:id',  (req, res) => {
         const Player_ID = req.params.id;
-        connection.query('SELECT * FROM players WHERE Player_ID = PLY005 ',[Player_ID],(err,result) => {
+        connection.query('SELECT * FROM players WHERE Player_ID = ?',[Player_ID],(err,result) => {
             if (err) {
                 console.error('Error retrieving player', err);
                 return res.status(500).json({error : 'Error retrieving player'});
@@ -72,7 +72,7 @@ app.post ('/', (req,res) => {
 });
 
 
-app.put('/', (req,res) => {
+app.put('/:id', (req,res) => {
     const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
     const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
     connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
@@ -89,10 +89,10 @@ app.put('/', (req,res) => {
 
 app.delete ('/:id', (req,res) => {
     const Player_ID = req.params.id;
-    const query = 'DELETE FROM players WHERE Player_ID = ?';
+    const query = 'DELETE FROM players WHERE Player_ID = ? ';
     connection.query (query, [Player_ID], (err,result) => {
         if (err) {
-            console.log ('Error deleting player');
+            console.log ('Error deleting player', err);
             return res.status(500).json({error : 'Error deleting player'});
         }
         if (result.affectedRows === 0) {

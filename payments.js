@@ -44,7 +44,7 @@ app.get ('/',  (req, res) => {
     });
 
     
-app.get ('/payments/:id',  (req, res) => {
+app.get ('/:id',  (req, res) => {
     const Payment_ID = req.params.id;
     connection.query('SELECT * FROM payments WHERE Payment_ID = ?',[Payment_ID],(err,result) => {
         if (err) {
@@ -72,33 +72,33 @@ app.post ('/', (req,res) => {
 });
 
 
-app.put('/', (req,res) => {
-    const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
-    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
-    connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
+app.put('/:id', (req,res) => {
+    const { Payment_ID , Payment_Method, Amount } = req.body;
+    const updatedPaymentData = { Payment_ID , Payment_Method, Amount};
+    connection.query ('UPDATE payments SET ? WHERE Payment_ID = ?', [updatedPaymentData, Payment_ID], (err,result) => {
         if (err) {
-            console.error ('Error updating player');
-            return res.status (500).json({error : 'Error updating player'});
+            console.error ('Error updating payment');
+            return res.status (500).json({error : 'Error updating payment'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Payment not found'});
         }
-        res.json ({message : 'Player updated successfully'});
+        res.json ({message : 'Payment updated successfully'});
     });
 });
 
 app.delete ('/:id', (req,res) => {
-    const Player_ID = req.params.id;
-    const query = 'DELETE FROM players WHERE Player_ID = ?';
-    connection.query (query, [Player_ID], (err,result) => {
+    const Payment_ID = req.params.id;
+    const query = 'DELETE FROM payments WHERE Payment_ID = ?';
+    connection.query (query, [Payment_ID], (err,result) => {
         if (err) {
-            console.log ('Error deleting player');
-            return res.status(500).json({error : 'Error deleting player'});
+            console.log ('Error deleting payment');
+            return res.status(500).json({error : 'Error deleting payment'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Payment not found'});
         }
-        res.json({message : 'Player deleted successfully'});
+        res.json({message : 'Payment deleted successfully'});
     });
 });
 
