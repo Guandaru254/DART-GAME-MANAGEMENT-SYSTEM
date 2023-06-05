@@ -4,6 +4,7 @@ const express = require('express');
 
 const mysql = require('mysql');
 
+
 const dbConfig = {
     host : 'localhost',
     user : 'root',
@@ -72,33 +73,33 @@ app.post ('/', (req,res) => {
 });
 
 
-app.put('/', (req,res) => {
-    const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
-    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
-    connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
+app.put('/:id', (req,res) => {
+    const { Score_ID , Score_Value } = req.body;
+    const updatedScoreData = { Score_ID , Score_Value };
+    connection.query ('UPDATE scores SET ? WHERE Score_ID = ?', [updatedScoreData, Score_ID], (err,result) => {
         if (err) {
-            console.error ('Error updating player');
-            return res.status (500).json({error : 'Error updating player'});
+            console.error ('Error updating score');
+            return res.status (500).json({error : 'Error updating score'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Score not found'});
         }
-        res.json ({message : 'Player updated successfully'});
+        res.json ({message : 'Score updated successfully'});
     });
 });
 
 app.delete ('/:id', (req,res) => {
-    const Player_ID = req.params.id;
-    const query = 'DELETE FROM players WHERE Player_ID = ?';
-    connection.query (query, [Player_ID], (err,result) => {
+    const Score_ID = req.params.id;
+    const query = 'DELETE FROM scores WHERE Score_ID = ?';
+    connection.query (query, [Score_ID], (err,result) => {
         if (err) {
-            console.log ('Error deleting player');
-            return res.status(500).json({error : 'Error deleting player'});
+            console.log ('Error deleting score');
+            return res.status(500).json({error : 'Error deleting score'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Score not found'});
         }
-        res.json({message : 'Player deleted successfully'});
+        res.json({message : 'Score deleted successfully'});
     });
 });
 
