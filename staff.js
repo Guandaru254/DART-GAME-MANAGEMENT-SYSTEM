@@ -43,22 +43,6 @@ app.get ('/',  (req, res) => {
         });
     });
 
-    
-app.get ('/:id',  (req, res) => {
-    const paymentId = req.params.id;
-    connection.query('SELECT * FROM payments WHERE id = ?',[paymentId],(err,result) => {
-        if (err) {
-            console.error('Error retrieving payment');
-            return res.status(500).json({error : 'Error retrieving payment'});
-        }
-        if (result.length === 0) {
-            return res.status(404).json({error : 'No payment found'});
-        }
-        
-        res.json(result[0]);
-    });
-});
-
 app.get ('/:id',  (req, res) => {
     const Staff_ID = req.params.id;
     connection.query('SELECT * FROM staff WHERE Staff_ID = ?',[Staff_ID],(err,result) => {
@@ -75,7 +59,7 @@ app.get ('/:id',  (req, res) => {
 });
 
 app.post ('/', (req,res) => {
-   // const { Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age  } = req.body;
+    const { Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age  } = req.body;
     const query = 'INSERT INTO staff (Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age) VALUES (?,?,?,?,?,?,?) ';
     connection.query(query, [Staff_ID , Board_ID , Game_ID , Staff_Name , Phone_Number , Gender , Age], (err,result) => {
         if (err) {
@@ -87,34 +71,34 @@ app.post ('/', (req,res) => {
 });
 
 
-app.put('/', (req,res) => {
-    const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
-    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
-    connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
+app.put('/:id', (req,res) => {
+    const { Staff_ID , Age } = req.body;
+    const updatedStaffData = { Staff_ID , Age  };
+    connection.query ('UPDATE staff SET ? WHERE Staff_ID = ?', [updatedStaffData, Staff_ID], (err,result) => {
         if (err) {
-            console.error ('Error updating player');
-            return res.status (500).json({error : 'Error updating player'});
+            console.error ('Error updating staff');
+            return res.status (500).json({error : 'Error updating staff'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Staff not found'});
         }
-        res.json ({message : 'Player updated successfully'});
+        res.json ({message : 'Staff updated successfully'});
     });
 });
 
 
 app.delete ('/:id', (req,res) => {
-    const Player_ID = req.params.id;
-    const query = 'DELETE FROM players WHERE Player_ID = ?';
-    connection.query (query, [Player_ID], (err,result) => {
+    const Staff_ID = req.params.id;
+    const query = 'DELETE FROM staff WHERE Staff_ID = ?';
+    connection.query (query, [Staff_ID], (err,result) => {
         if (err) {
-            console.log ('Error deleting player');
-            return res.status(500).json({error : 'Error deleting player'});
+            console.log ('Error deleting staff');
+            return res.status(500).json({error : 'Error deleting staff'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Staff not found'});
         }
-        res.json({message : 'Player deleted successfully'});
+        res.json({message : 'Staff deleted successfully'});
     });
 });
 
