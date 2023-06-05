@@ -13,6 +13,7 @@ const dbConfig = {
 };
 
 // Create a router instance
+
 const app = express();
 
 app.use (express.json());
@@ -72,34 +73,34 @@ app.post ('/', (req,res) => {
 });
 
 
-app.put('/', (req,res) => {
-    const { Player_ID, Player_Name, Phone_Number, Age } = req.body;
-    const updatedPlayerData = { Player_ID , Player_Name , Phone_Number , Age  };
-    connection.query ('UPDATE players SET ? WHERE Player_ID = ?', [updatedPlayerData, Player_ID], (err,result) => {
+app.put('/:id', (req,res) => {
+    const { Game_ID, Game_Status } = req.body;
+    const updatedGameData = {  Game_ID, Game_Status  };
+    connection.query ('UPDATE games SET ? WHERE Game_ID = ?', [updatedGameData, Game_ID], (err,result) => {
         if (err) {
-            console.error ('Error updating player');
-            return res.status (500).json({error : 'Error updating player'});
+            console.error ('Error updating game');
+            return res.status (500).json({error : 'Error updating game'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Game not found'});
         }
-        res.json ({message : 'Player updated successfully'});
+        res.json ({message : 'Game updated successfully'});
     });
 });
 
 
 app.delete ('/:id', (req,res) => {
-    const Player_ID = req.params.id;
-    const query = 'DELETE FROM players WHERE Player_ID = ?';
-    connection.query (query, [Player_ID], (err,result) => {
+    const Game_ID = req.params.id;
+    const query = 'DELETE FROM games WHERE Game_ID = ?';
+    connection.query (query, [Game_ID], (err,result) => {
         if (err) {
-            console.log ('Error deleting player');
-            return res.status(500).json({error : 'Error deleting player'});
+            console.log ('Error deleting game');
+            return res.status(500).json({error : 'Error deleting game'});
         }
         if (result.affectedRows === 0) {
-            return res.status (404).json({error : 'Player not found'});
+            return res.status (404).json({error : 'Game not found'});
         }
-        res.json({message : 'Player deleted successfully'});
+        res.json({message : 'Game deleted successfully'});
     });
 });
 
