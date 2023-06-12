@@ -1,3 +1,8 @@
 #parentM ul li a:hover {
     background-color: darkturquoise;
 }
+.nav-link:hover
+ {
+    background-color : #1351ed;
+    color : #000; 
+}

@@ -1,15 +1,17 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-icons/font/bootstrap-icons.css';
-import 'bootstrap/js/dist/dropdown'
-import 'bootstrap/js/dist/collapse'
-import './sidenav.css'
+import 'bootstrap/js/dist/dropdown';
+import 'bootstrap/js/dist/collapse';
+import './sidenav.css';
+import dartimg from "./dartimg.png";
 
 function SidebarMenu() {
     return (
-      <div className='container-fluid'>
+      <div className='container-fluid' style={{backgroundImage:`url(${dartimg})`,
+      backgroundSize:' cover', backgroundPosition:'left top:', backgroundAttachment: 'fixed', minHeight:'100vh',}}>
       <div className='row'>
-        <div className='col-auto col-sm-2 bg-dark d-flex flex-column justify-content-between min-vh100 mt-4'>
+        <div className='col-auto col-sm-2 bg-dark d-flex flex-column justify-content-between min-vh100 mt-4' style={{ minHeight:'100vh', }}>
            <div>
               <a className='text-decoration-none ms-4 d-flex align-items-center text-white d-none d-sm-inline'>
               <i className='bi bi-house'></i>
@@ -18,7 +20,11 @@ function SidebarMenu() {
                  <hr className='text-white d-none d-sm-block'></hr>
                  <ul class="nav nav-pills flex-column" id='parentM'>
                      <li class="nav-item my-1">
-                        <a href='#' class="nav-link text-white" aria-content="page">Player Section</a>
+                        <a href='#' class="nav-link text-white" aria-content="page">
+                        <i className='bi bi-people'></i>
+                        <span className='ms-2 d-none d-sm-inline'>Player Section</span>
+                        </a>
+
                      </li>
                      <li class="nav-item my-1">
                         <a href='#submenu' class="nav-link text-white" data-bs-toggle="collapse" aria-current="page">
@@ -37,7 +43,7 @@ function SidebarMenu() {
                      </li>
                      <li class="nav-item">
                         <a href="#" class="nav-link text-white" aria-current="page">
-                           <i className='bi bi-speedometer2'></i>
+                           <i className='bi bi-star'></i>
                           <span className='ms-2 d-none d-sm-inline'>Scores Statistics</span>
                           </a>
                           <ul class="nav collapse ms-2 flex-column" id="submenu" data-bs-parent="#">
@@ -51,7 +57,7 @@ function SidebarMenu() {
                      </li>
                      <li class="nav-item my-1">
                         <a href="#" class="nav-link text-white" aria-current="page">
-                            <i className='bi bi-people'></i>
+                            <i className='bi bi-trophy'></i>
                           <span className='ms-2 d-none d-sm-inline'>Leaderboards</span>
                           </a>
                           <ul class="nav collapse ms-2 flex-column" id="submenu" data-bs-parent="#">
@@ -77,6 +83,9 @@ function SidebarMenu() {
            </div>
         </div>
       </div>
+      <div className='col'>
+
+           </div>
       </div>
     )
 }
