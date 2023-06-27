@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function CreatePlayer () {
+function CreateGame () {
 
 const [Player_Name, setPlayer_Name] = useState("");
 const [Phone_Number, setPhone_Number] = useState("");
