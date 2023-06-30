@@ -14,7 +14,7 @@ const [Designation_ID, setDesignation_ID] = useState("");
 
 async function handleCreateStaff() {
     try {
-        const response = await axios.post('./staff',{
+        const response = await axios.post('http://localhost:3000/staff',{
             Staff_ID,Board_ID,Phone_Number,Staff_Name,Gender,Age,Hire_Date,Designation_ID
         });
 
