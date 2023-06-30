@@ -14,7 +14,7 @@ const [Status_Of_Payment, setStatus_Of_Payment] = useState("");
 
 async function handleCreatePayment() {
     try {
-        const response = await axios.post('./games',{
+        const response = await axios.post('http://localhost:3000/payments',{
             Payment_ID,Player_ID,Game_ID,Payment_Method,Amount,Date_Of_Payment,Time_Of_Payement,Status_Of_Payment
         });
 
