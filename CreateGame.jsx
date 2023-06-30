@@ -10,7 +10,7 @@ const [Game_Status, setGame_Status] = useState("");
 
 async function handleCreateGame() {
     try {
-        const response = await axios.post('./games',{
+        const response = await axios.post('http://localhost:3000/games',{
             Game_ID,Player_ID,Game_Type,Game_Status
         });
 
