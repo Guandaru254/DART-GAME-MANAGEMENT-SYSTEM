@@ -1,59 +1,84 @@
-import React, { useState } from "react";
-import { Table,TableBody,TableCell,TableContainer,TableHead,TableRow,Paper } from '@mui/material';
+import React from 'react';
+import { useTable } from 'react-table';
 
- function BoardsPage () {
-         // State to store boards data
-    const [ boards,setBoards ] = useState([]);
-         // fetch boards data and update the state
-    const fetchBoardsData = () => {
-        // Fetch boards data from your API using appropriate functions
-    const boardsData = getAllBoards (); 
-         // Implement this function in your API file
-    setBoards(boardsData);
-    };
-        // Call fetchBoardsData when the component mounts
-    useEffect(() => {
-        fetchBoardsData();
-    }, []);
 
-    return (
-        <div>
-            <h2>Boards Page</h2>
+const BoardsPage = () => {
+    const data = React.useMemo(() => [{
+       Board_ID : 1,
+       Player_ID : 2,
+       Game_ID : 3,
+       Board_Name : Board1,
+       Board_Model : Board2,
+       Board_Location : Location1,
+       Availbale : YES,
+    },
+    {
+        Board_ID : 2,
+        Player_ID : 102,
+        Game_ID : 1033,
+        Board_Name : Board2,
+        Board_Model : Board3,
+        Board_Location : Location2,
+        Availbale : YES,
+    },
+],[]
+);
 
-            { boards.length > 0 ? (
-              <TableContainer component = { Paperr }>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>Player ID</TableCell>
-                            <TableCell>Board ID</TableCell>
-                            <TableCell>Game ID</TableCell>
-                            <TableCell>Board Name</TableCell>
-                            <TableCell>Board Model</TableCell>
-                            <TableCell>Is Available</TableCell>
-                            <TableCell>Board Location</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        { boards.map((board) => (
-                        <TableRow key={board.boardId}>
-                            <TableCell>{ board.playerId }</TableCell>
-                            <TableCell>{ board.boardId }</TableCell>
-                            <TableCell>{ board.gameId }</TableCell>
-                            <TableCell>{ board.boardName }</TableCell>
-                            <TableCell>{ board.boardModel }</TableCell>
-                            <TableCell>{ board.IsAvailable ? 'Yes' : 'No' }</TableCell>
-                            <TableCell>{ board.boardLocation }</TableCell>  
-                        </TableRow> 
-                        ))}
-                    </TableBody> 
-                </Table>
-              </TableContainer>
-            ) : (
-          <p>No boards Available</p>
-            )}
-        </div>
-    )
- }
+const columns = React.useMemo(() => [{
+    Header : 'Board ID',
+    accessor : 'Board_ID',
+    Header : 'Player ID',
+    accessor : 'Player_ID',
+    Header : 'Game ID',
+    accessor : 'Game_ID',
+    Haeder : 'Board Name',
+    accessor : 'Board_Name',
+    Header : 'Board Model',
+    accessor : 'Board_Model',
+    Header : 'Board Location',
+    accessor : 'Board_Location',
+    Header : 'Available',
+    accessor : 'Available',
+},], [] );
 
- export default BoardsPage;
+const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+} = useTable ({ columns,data });
+
+return (
+    <div>
+        <h2>Boards</h2>
+        <table {...getTableProps()}style = {{ border: '1px solid black' }} > 
+          <thead>
+            {headerGroups.map(headerGroup => (
+                <tr { ...headerGroup.headers.map(column => (
+                    <th { ...column.getHeaderProps ()} style = {{ borderbottom : '1px solid black', background : 'aliceblue', fontWeight : 'bold', }} >
+                        {column.render('Header')}
+                    </th>
+                )) } ></tr>
+            ))}
+          </thead>
+          <tbody {...getTableBodyProps()} > 
+             {rows.map(row => {
+                prepareRow(row);
+                return(
+                    <tr {...rowgetRowprops()} >
+                        {rows.cells.map(cell => (
+                            <td {...cell.getCellProps()} style = {{ padding : '10px', border : '1px solid black', background : 'white', }} >
+                              {cell.render('Cell')}  
+                            </td>
+             ))}
+                    </tr>
+                )
+             })}
+          </tbody>
+        </table>
+    </div>
+);
+            };
+
+export default BoardsPage;
