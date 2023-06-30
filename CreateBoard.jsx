@@ -11,7 +11,7 @@ const [Is_Available, setIs_Available] = useState("");
 
 async function handleCreateBoard() {
     try {
-        const response = await axios.post('./boards',{
+        const response = await axios.post('http://localhost:3000/boards',{
             Board_ID,Board_Name,Board_Model,Board_Location,Is_Available
         });
 
