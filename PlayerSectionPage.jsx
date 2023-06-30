@@ -7,10 +7,12 @@ import {Edit,Delete} from '@material-ui/icons';
 
 function PlayerSectionPage () {
        const [players, setPlayers] = useState ([]);
-       const [Name, setName] = useState ('');
-       const [PhoneNo, setPhoneNo] = useState ('');
+       const [Player_Name, setPlayer_Name] = useState ('');
+       const [Phone_Number, setPhone_Number] = useState ('');
        const [Age, setAge] = useState ('');
-       const [RegDate, setRegDate] = useState ('');
+       const [Gender, setGender] = useState ('');
+       const [Date_Registered, setDate_Registered] = useState ('');
+       const [Preferred_Hand, setPreferred_Hand] = useState ('');
 
 
 useEffect ( () => {
@@ -45,7 +47,7 @@ async function fetchPlayers () {
 
 async function deletePlayer (playerID) {
     try {
-        await axios.delete('/players/${playerID}');
+        await axios.delete('/players/${playerID}'); 
         setPlayers( (prevPlayers) => 
         prevPlayers.filter( (player) =>
         player.id !== playerID)
@@ -53,7 +55,7 @@ async function deletePlayer (playerID) {
     }
     catch (error) {
         console.error('Error deleting player', error);
-    }
+    }  
 }   
 
 
@@ -75,30 +77,19 @@ return (
               <TableCell>Age</TableCell>
               <TableCell>Gender</TableCell>
               <TableCell>Date_Registered</TableCell>
-              <TableCell>Last_Played</TableCell>
-              <TableCell>IsActive</TableCell>
-              <TableCell>Games_Played</TableCell>
-              <TableCell>Games_Won</TableCell>
               <TableCell>Preferred_Hand</TableCell>
-              <TableCell>Games_Lost</TableCell>
-              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
             {players.map((player) => (
               <TableRow key={player.id}>
                 <TableCell>{player.id}</TableCell>
-                <TableCell>{player.name}</TableCell>
-                <TableCell>{player.phoneNo}</TableCell>
-                <TableCell>{player.age}</TableCell>
-                <TableCell>{player.gender}</TableCell>
-                <TableCell>{player.regDate}</TableCell>
-                <TableCell>{player.lastPlayed}</TableCell>
-                <TableCell>{player.isActive}</TableCell>
-                <TableCell>{player.gamesPlayed}</TableCell>
-                <TableCell>{player.gamesWon}</TableCell>
-                <TableCell>{player.preferredHand}</TableCell>
-                <TableCell>{player.gamesLost}</TableCell> 
+                <TableCell>{player.Player_Name}</TableCell>
+                <TableCell>{player.Phone_Number}</TableCell>
+                <TableCell>{player.Age}</TableCell>
+                <TableCell>{player.Gender}</TableCell>
+                <TableCell>{player.Date_Registered}</TableCell>
+                <TableCell>{player.Preferred_Hand}</TableCell>
        <TableCell>
         <IconButton onClick = {() =>  updatePlayer(player.id, updatedData)}>
         <Edit/>
