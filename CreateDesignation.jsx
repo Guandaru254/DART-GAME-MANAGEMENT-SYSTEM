@@ -9,7 +9,7 @@ const [Hire_Date, setHire_Date] = useState("");
 
 async function handleCreateDesignation() {
     try {
-        const response = await axios.post('./designations',{
+        const response = await axios.post('http://localhost:3000/designations',{
             Designation_ID,Designation_Role,Hire_Date
         });
 
