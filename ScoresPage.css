@@ -1,0 +1,8 @@
+.blue-button {
+    background-color: #007bff;
+    color: aliceblue;
+}
+.blue-button : hover {
+    background-color: #0069d9;
+    color : #fff;
+}
